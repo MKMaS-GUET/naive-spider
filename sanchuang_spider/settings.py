@@ -59,6 +59,7 @@ LOG_FILE = './logs/log.txt'
 # start MySQL database configure setting
 MYSQL_HOST = '124.71.19.9'
 MYSQL_DBNAME = 'commodity_spider'
+MYSQL_DBNAMEMALL = 'newbee_mall_db'
 MYSQL_USER = 'zhu'
 MYSQL_PASSWD = 'Zhu#cpss'
 MYSQL_CHARSET = 'utf8'

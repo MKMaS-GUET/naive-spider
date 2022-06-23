@@ -56,9 +56,10 @@ class JDProductInfoPipeline(object):
             """.format(tablename)
             VALUES = (pid, pname, pdes, purl, str(pcate), price, sname, str(params))
             cursor.execute(sql, VALUES)
-            print("导入数据库成功！")
+            # print(tablename, "导入数据库成功！")
         except pymysql.err.IntegrityError as e:
-            print(e)
+            # print(sql, VALUES)
+            # print(e)
             pass
 
     def do_insert_review(self, cursor, item):
@@ -77,6 +78,8 @@ class JDProductInfoPipeline(object):
         # print(VALUES)
         try:
             cursor.execute(sql, VALUES)
-            print("评论数据导入成功")
+            # print(tablename, "评论数据导入成功")
         except Exception as e:
-            print(e)
+            # print(sql)
+            # print(e)
+            pass

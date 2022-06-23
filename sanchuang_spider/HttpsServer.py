@@ -3,9 +3,10 @@ from flask_cors import CORS
 from apscheduler.schedulers.background import BlockingScheduler
 from apscheduler.executors.pool import ThreadPoolExecutor
 import time
-from sanchuang_spider.run import imme_crawl, crawl_with_cycle
+from run import imme_crawl, crawl_with_cycle
 import threading
 import json
+from ctypes import *
 
 REQUEST_METHOD_MAP = {'GET': 'args', 'POST': 'form'}
 executors = {
@@ -31,6 +32,19 @@ app = Flask(__name__)
 scheduler = BlockingScheduler(executors=executors)
 CORS(app)
 
+
+def get_params(key):
+    if request.method == "GET":
+        val = request.args.get(key)
+        return val
+    if request.method == "POST":
+        if request.content_type.startswith('application/json'):
+            val = request.json.get(key)
+        elif request.content_type.startswith('multipart/form-data'):
+            val = request.form.get(key)
+        else:
+            val = request.values.get(key)
+        return val
 
 class MyThread(threading.Thread):
     def __init__(self, keywords="", sort_type=0, spiderName="", type="", day_of_week="", hour=0, minute=0, second=0, running_time=0):
@@ -66,8 +80,8 @@ class MyThread(threading.Thread):
 
 @app.route('/spider/immediately', methods=['POST', 'GET'])
 def imme_run():
-    params = _get_request_params()
-    t = MyThread(keywords=params['keywords'], sort_type=params['sort_type'], spiderName=params['spiderName'], type='imme', running_time=params['running_time'])
+    t = MyThread(keywords=get_params('keywords'), sort_type=get_params('sort_type'), spiderName=get_params('spiderName')
+                 , type='imme', running_time=get_params('running_time'))
     t.start()
     return jsonify(code=1, message="immediately spider running successfully")
 
@@ -83,17 +97,16 @@ def cycle_run_modify():
         Saturday=5,
         Sunday=6,
     )
-    params = _get_request_params()
-    RUNNING_TIME = params['running_time']
-    t1 = MyThread(keywords=params['keywords'], sort_type=params['sort_type'], spiderName=params['spiderName'], type='cycle',
-                  day_of_week=Date[params['day_of_week']], hour=params['hour'], minute=params['minute'], second=params['second'], running_time=RUNNING_TIME)
+
+    t1 = MyThread(keywords=get_params('keywords'), sort_type=get_params('sort_type'), spiderName=get_params('spiderName'), type='cycle',
+                  day_of_week=Date[get_params('day_of_week')], hour=get_params('hour'), minute=get_params('minute'), second=get_params('second'), running_time=get_params('running_time'))
     t1.start()
     return jsonify(code=1, message="timed spider running successfully")
 
 @app.route('/spider/stop_spider')
 def stop_spider():
-
+    request.environ.get('')
     return jsonify(code=1, message="stop spider running")
 
 
-app.run(host='0.0.0.0', debug=True)
+app.run(host='0.0.0.0', port=5000, debug=True)

@@ -1,0 +1,22 @@
+version: '3'
+networks:
+    spider:
+services:
+    sanchuang_spider:
+      build:
+        sanchuang_spider
+      networks:
+        - spider
+      ports:
+      - "5000"
+    nginx:
+      build:
+        nginx
+      networks:
+        - spider
+      depends_on:
+        - sanchuang_spider
+      links:
+        - sanchuang_spider
+      ports:
+      - "5000:80"

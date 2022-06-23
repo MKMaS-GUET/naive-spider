@@ -1,12 +1,8 @@
-# This file may be used to create an environment using:
-# $ conda create --name <env> --file <this file>
-# platform: win-64
-apscheduler=3.7.0=py38haa95532_0
-flask=1.1.2=pyhd3eb1b0_0
-flask-cors=3.0.10=pypi_0
-pymysql=1.0.2=py38haa95532_1
-python=3.8.11=h6244533_1
-scrapy=2.4.1=py38haa95532_0
-selenium=3.141.0=py38h2bbff1b_1000
-twisted=21.7.0=py38h2bbff1b_0
-urllib3=1.26.7=pyhd3eb1b0_0
+apscheduler
+flask
+flask-cors
+pymysql
+scrapy
+selenium
+twisted
+urllib3
